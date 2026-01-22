@@ -1,0 +1,62 @@
+
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>靜心念佛 - 數位修持計數器</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            /* 調整為仿宋體優先 */
+            font-family: "FangSong", "STFangsong", "SimSun", "Noto Serif TC", serif;
+            background-color: #FAF7F2; /* 宣紙色 */
+        }
+        .serif-font {
+            font-family: "FangSong", "STFangsong", "SimSun", "Noto Serif TC", serif;
+        }
+        .calligraphy-font {
+            font-family: "Kaiti", "STKaiti", "BiauKai", "标楷体", "DFKai-SB", "Noto Serif TC", serif;
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #A8584C; /* 柔和赤陶紅 */
+            border-radius: 10px;
+        }
+        
+        /* 防止 iOS 輸入時自動放大，強制字體大小 */
+        @media screen and (max-width: 768px) {
+            input, textarea, select {
+                font-size: 16px !important;
+            }
+        }
+    </style>
+<script type="importmap">
+{
+  "imports": {
+    "framer-motion": "https://esm.sh/framer-motion@^12.26.2",
+    "lucide-react": "https://esm.sh/lucide-react@^0.562.0",
+    "recharts": "https://esm.sh/recharts@^3.6.0",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+    "react/": "https://esm.sh/react@^19.2.3/",
+    "react": "https://esm.sh/react@^19.2.3",
+    "date-fns/": "https://esm.sh/date-fns@^4.1.0/",
+    "date-fns": "https://esm.sh/date-fns@^4.1.0",
+    "html2canvas": "https://esm.sh/html2canvas@1.4.1"
+  }
+}
+</script>
+</head>
+<body class="overflow-hidden bg-[#FAF7F2] text-[#4E342E]">
+    <div id="root"></div>
+</body>
+</html>
