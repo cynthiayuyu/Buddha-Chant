@@ -1,20 +1,39 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# Mindful Repetition
 
-# Run and deploy your AI Studio app
+靜心念佛 --- 數位修持計數器
 
-This contains everything you need to run your app locally.
+## Getting Started
 
-View your app in AI Studio: https://ai.studio/apps/drive/1PR6m8dONpiZVOFtNO4vfRKOiNwGp-nqU
+1.  **Install dependencies:**
+    ```bash
+    npm install
+    ```
 
-## Run Locally
+2.  **Start development server:**
+    ```bash
+    npm run dev
+    ```
 
-**Prerequisites:**  Node.js
+3.  **Build for production:**
+    ```bash
+    npm run build
+    ```
 
+## Deployment
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+This project is configured to deploy to **GitHub Pages** automatically using GitHub Actions.
+
+1.  Push changes to the `main` branch.
+    ```bash
+    git push origin main
+    ```
+2.  The GitHub Action will build and deploy the application.
+3.  Ensure your GitHub repository settings have Pages enabled and set to deploy from `gh-pages` branch (or via Actions).
+
+## Technologies
+
+- React
+- Vite
+- TypeScript
+- Tailwind CSS
+- Lucide React (Icons)
