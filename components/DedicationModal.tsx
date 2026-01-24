@@ -204,9 +204,9 @@ const DedicationModal: React.FC<Props> = ({ onClose, todayCount, currentChant, c
                   <span className="text-[10px] font-bold text-[#A8584C] leading-none">靜心</span>
                   <span className="text-[10px] font-bold text-[#A8584C] leading-none">念佛</span>
                 </div>
-                {/* App Name */}
-                <div className="ml-3 text-left flex flex-col justify-center translate-y-[-1px]">
-                  <p className="text-[10px] text-gray-400 font-bold tracking-widest uppercase indent-[0.1em] leading-tight mb-0.5">APP</p>
+                {/* App Name - explicitly matching height to logo for robust alignment */}
+                <div className="ml-3 text-left h-12 flex flex-col justify-center -mt-0.5">
+                  <p className="text-[10px] text-gray-400 font-bold tracking-widest uppercase indent-[0.1em] leading-none mb-1">APP</p>
                   <p className="text-xs font-bold text-[#A8584C] tracking-widest indent-[0.1em] leading-none">靜心念佛</p>
                 </div>
               </div>
