@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="64" fill="#FAF7F2"/>
+  <circle cx="256" cy="200" r="80" fill="none" stroke="#A8584C" stroke-width="8"/>
+  <path d="M256 120 L256 80" stroke="#A8584C" stroke-width="6" stroke-linecap="round"/>
+  <circle cx="256" cy="70" r="8" fill="#A8584C"/>
+  <ellipse cx="256" cy="380" rx="120" ry="40" fill="none" stroke="#A8584C" stroke-width="6"/>
+  <path d="M136 380 Q136 320 256 300 Q376 320 376 380" fill="none" stroke="#A8584C" stroke-width="6"/>
+  <text x="256" y="210" font-family="serif" font-size="48" fill="#A8584C" text-anchor="middle" font-weight="bold">佛</text>
+</svg>

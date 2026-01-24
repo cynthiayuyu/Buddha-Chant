@@ -41,4 +41,7 @@ export interface UserSettings {
   vows: Vow[]; // 新增：使用者的發願列表
   sutras: Sutra[];
   statsTabOrder?: string[];
+  // 雲端備份設定
+  cloudBackupEnabled?: boolean;
+  lastSyncTime?: string; // ISO String
 }
