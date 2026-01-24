@@ -1,10 +1,10 @@
 
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  Flower2, 
-  History as HistoryIcon, 
-  Settings as SettingsIcon, 
+import {
+  Flower2,
+  History as HistoryIcon,
+  Settings as SettingsIcon,
   BarChart3 as StatsIcon,
   BookOpen,
   Library
@@ -21,7 +21,7 @@ import { DEFAULT_CHANTS, DEFAULT_SUTRAS } from './constants';
 
 const App: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'counter' | 'history' | 'sutras' | 'stats' | 'settings'>('counter');
-  
+
   // 優化：直接在初始化時讀取 localStorage，確保狀態立即生效
   const [records, setRecords] = useState<ChantRecord[]>(() => {
     try {
@@ -31,15 +31,15 @@ const App: React.FC = () => {
       return [];
     }
   });
-  
+
   const defaultItemGoal: ItemGoal = { day: 1080, month: 30000, year: 360000, lifetime: 1000000 };
-  
+
   // 優化：直接在初始化時讀取並合併設定，解決設定延遲載入的問題
   const [settings, setSettings] = useState<UserSettings>(() => {
     try {
       const saved = localStorage.getItem('zen_settings');
       const parsed = saved ? JSON.parse(saved) : {};
-      
+
       return {
         feedback: 'woodfish',
         vibrate: true,
@@ -97,7 +97,7 @@ const App: React.FC = () => {
     if (count <= 0) return;
     // 使用 date-fns format 獲取本地時間的 YYYY-MM-DD，解決跨夜問題
     const today = format(new Date(), 'yyyy-MM-dd');
-    
+
     setRecords(prev => {
       const existingIdx = prev.findIndex(r => r.date === today && r.item === currentChant);
       if (existingIdx > -1) {
@@ -127,15 +127,15 @@ const App: React.FC = () => {
 
   return (
     <div className="flex flex-col h-screen max-w-md mx-auto bg-[#FAF7F2] relative shadow-2xl overflow-hidden">
-      <div className="absolute inset-0 pointer-events-none opacity-[0.05] bg-[url('https://www.transparenttextures.com/patterns/handmade-paper.png')]" />
-      
+      {/* <div className="absolute inset-0 pointer-events-none opacity-[0.05] bg-[url('https://www.transparenttextures.com/patterns/handmade-paper.png')]" /> */}
+
       <header className="pt-8 pb-4 px-6 flex justify-between items-end relative z-10 bg-[#FAF7F2]/80 backdrop-blur-sm">
         <div>
           {/* 修改為書法字體，顏色改為柔和赤陶紅 */}
           <h1 className="calligraphy-font text-3xl font-bold text-[#A8584C]">靜心念佛</h1>
           <p className="text-xs text-gray-500 font-bold tracking-[0.2em] uppercase mt-1">Mindful Repetition</p>
         </div>
-        <button 
+        <button
           onClick={() => setShowDedication(true)}
           className="flex items-center gap-1.5 text-xs bg-[#F2E6E4] text-[#A8584C] px-5 py-2.5 rounded-full font-bold shadow-sm active:scale-95 transition-all border border-[#A8584C]/20"
         >
@@ -148,7 +148,7 @@ const App: React.FC = () => {
         <AnimatePresence mode="wait">
           {activeTab === 'counter' && (
             <motion.div key="counter" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="h-full">
-              <ZenCounter 
+              <ZenCounter
                 currentChant={currentChant}
                 setCurrentChant={setCurrentChant}
                 availableChants={sortedChants}
@@ -172,8 +172,8 @@ const App: React.FC = () => {
           )}
           {activeTab === 'stats' && (
             <motion.div key="stats" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="h-full">
-              <Stats 
-                records={records} 
+              <Stats
+                records={records}
                 settings={settings}
                 setSettings={setSettings}
               />
@@ -192,9 +192,8 @@ const App: React.FC = () => {
           <button
             key={item.id}
             onClick={() => setActiveTab(item.id as any)}
-            className={`flex flex-col items-center gap-1.5 transition-all relative flex-1 ${
-              activeTab === item.id ? 'text-[#A8584C]' : 'text-gray-400'
-            }`}
+            className={`flex flex-col items-center gap-1.5 transition-all relative flex-1 ${activeTab === item.id ? 'text-[#A8584C]' : 'text-gray-400'
+              }`}
           >
             <item.icon size={24} strokeWidth={activeTab === item.id ? 2.5 : 2} />
             <span className="text-[10px] font-bold">{item.label}</span>
@@ -207,8 +206,8 @@ const App: React.FC = () => {
 
       <AnimatePresence>
         {showDedication && (
-          <DedicationModal 
-            onClose={() => setShowDedication(false)} 
+          <DedicationModal
+            onClose={() => setShowDedication(false)}
             todayCount={chantTodayTotal}
             currentChant={currentChant}
             customMeritText={settings.customMeritText}

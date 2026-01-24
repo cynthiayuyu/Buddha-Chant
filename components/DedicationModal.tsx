@@ -167,7 +167,7 @@ const DedicationModal: React.FC<Props> = ({ onClose, todayCount, currentChant, c
         <div className="absolute top-0 left-[-9999px] pointer-events-none">
           <div ref={cardRef} className="w-[375px] min-h-[667px] bg-[#FAF7F2] p-8 flex flex-col items-center justify-between relative border-[12px] border-[#F2E6E4]">
             {/* 背景紋理 */}
-            <div className="absolute inset-0 opacity-[0.08] bg-[url('https://www.transparenttextures.com/patterns/handmade-paper.png')]"></div>
+            {/* <div className="absolute inset-0 opacity-[0.08] bg-[url('https://www.transparenttextures.com/patterns/handmade-paper.png')]"></div> */}
 
             {/* 裝飾框線 */}
             <div className="absolute inset-4 border border-[#A8584C] opacity-20 rounded-[2rem]"></div>
