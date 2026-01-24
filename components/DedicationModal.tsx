@@ -198,16 +198,65 @@ const DedicationModal: React.FC<Props> = ({ onClose, todayCount, currentChant, c
                 {editableText}
               </div>
 
-              <div className="flex justify-center items-center pt-2">
-                {/* Logo Box */}
-                <div className="border-2 border-[#A8584C] w-12 h-12 flex flex-col items-center justify-center rounded-lg opacity-80 gap-0.5">
-                  <span className="text-[10px] font-bold text-[#A8584C] leading-none">靜心</span>
-                  <span className="text-[10px] font-bold text-[#A8584C] leading-none">念佛</span>
-                </div>
-                {/* App Name - explicitly matching height to logo for robust alignment */}
-                <div className="ml-3 text-left h-12 flex flex-col justify-center -mt-0.5">
-                  <p className="text-[10px] text-gray-400 font-bold tracking-widest uppercase indent-[0.1em] leading-none mb-1">APP</p>
-                  <p className="text-xs font-bold text-[#A8584C] tracking-widest indent-[0.1em] leading-none">靜心念佛</p>
+              {/* Footer Logo Section - Using Table/Flex Hybrid for Maximum Stability */}
+              <div
+                className="w-full flex justify-center items-center pt-2"
+                style={{
+                  height: '60px', // Explicit height
+                  marginTop: '10px'
+                }}
+              >
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '12px'
+                }}>
+                  {/* Logo Box */}
+                  <div style={{
+                    width: '48px',
+                    height: '48px',
+                    border: '2px solid #A8584C',
+                    borderRadius: '8px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    opacity: 0.9,
+                    backgroundColor: 'transparent' // Ensure bg is transparent
+                  }}>
+                    <span style={{ fontSize: '10px', fontWeight: 'bold', color: '#A8584C', lineHeight: '1', display: 'block' }}>靜心</span>
+                    <span style={{ fontSize: '10px', fontWeight: 'bold', color: '#A8584C', lineHeight: '1', display: 'block' }}>念佛</span>
+                  </div>
+
+                  {/* Text Label */}
+                  <div style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                    height: '48px', // Match Logo Height
+                    textAlign: 'left'
+                  }}>
+                    <p style={{
+                      fontSize: '10px',
+                      color: '#9CA3AF', // gray-400
+                      fontWeight: 'bold',
+                      letterSpacing: '0.1em',
+                      textTransform: 'uppercase',
+                      lineHeight: '1',
+                      margin: '0 0 4px 0', // Explicit margin
+                      paddingLeft: '2px' // indentation
+                    }}>APP</p>
+                    <p style={{
+                      fontSize: '12px',
+                      color: '#A8584C',
+                      fontWeight: 'bold',
+                      letterSpacing: '0.1em',
+                      lineHeight: '1',
+                      margin: '0',
+                      paddingLeft: '2px'
+                    }}>靜心念佛</p>
+                  </div>
                 </div>
               </div>
             </div>
