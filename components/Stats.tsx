@@ -55,6 +55,13 @@ const Stats: React.FC<Props> = ({ records, settings, setSettings }) => {
     target: '108'
   });
 
+  // 確保 newVow.chant 始終指向有效的法門
+  useEffect(() => {
+    if (sortedItems.length > 0 && !sortedItems.includes(newVow.chant)) {
+      setNewVow(prev => ({ ...prev, chant: sortedItems[0] }));
+    }
+  }, [sortedItems, newVow.chant]);
+
   const openReorder = () => {
     setTempOrder([...effectiveChantOrder]);
     setIsReordering(true);
