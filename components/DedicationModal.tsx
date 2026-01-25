@@ -171,11 +171,13 @@ const DedicationModal: React.FC<Props> = ({ onClose, todayCount, currentChant, c
               width: '375px',
               height: '667px',
               backgroundColor: '#FAF7F2',
-              padding: '32px',
+              padding: '24px',
+              paddingTop: '40px',
+              paddingBottom: '32px',
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
-              justifyContent: 'space-between',
+              justifyContent: 'flex-start',
               position: 'relative',
               border: '12px solid #F2E6E4',
               boxSizing: 'border-box'
@@ -209,7 +211,7 @@ const DedicationModal: React.FC<Props> = ({ onClose, todayCount, currentChant, c
             <div style={{
               width: '100%',
               textAlign: 'center',
-              paddingTop: '16px'
+              marginBottom: '24px'
             }}>
               <p style={{
                 fontSize: '14px',
@@ -245,13 +247,13 @@ const DedicationModal: React.FC<Props> = ({ onClose, todayCount, currentChant, c
               flexDirection: 'column',
               alignItems: 'center',
               width: '100%',
-              padding: '24px 0'
+              marginBottom: '20px'
             }}>
               <div style={{
                 fontSize: '1.5rem',
                 fontWeight: 'bold',
                 color: '#5D4037',
-                marginBottom: '16px',
+                marginBottom: '12px',
                 fontFamily: '"FangSong", "STFangsong", "SimSun", serif'
               }}>{currentChant}</div>
               <div style={{
@@ -260,7 +262,7 @@ const DedicationModal: React.FC<Props> = ({ onClose, todayCount, currentChant, c
                 color: '#A8584C',
                 letterSpacing: '-0.05em',
                 lineHeight: '1',
-                marginBottom: '16px',
+                marginBottom: '12px',
                 fontFamily: '"FangSong", "STFangsong", "SimSun", serif'
               }}>{todayCount.toLocaleString()}</div>
               <div style={{
@@ -279,7 +281,7 @@ const DedicationModal: React.FC<Props> = ({ onClose, todayCount, currentChant, c
             <div style={{
               width: '100%',
               textAlign: 'center',
-              paddingBottom: '16px'
+              marginTop: 'auto'
             }}>
               <div style={{
                 fontSize: '16px',
