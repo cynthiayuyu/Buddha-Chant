@@ -165,98 +165,183 @@ const DedicationModal: React.FC<Props> = ({ onClose, todayCount, currentChant, c
         {/* --- 隱藏的截圖區域 (Off-screen rendering) --- */}
         {/* 改為使用 absolute 和負座標隱藏，比 opacity:0 更穩定，確保 html2canvas 能抓取 */}
         <div className="absolute top-0 left-[-9999px] pointer-events-none">
-          <div ref={cardRef} className="w-[375px] bg-[#FAF7F2] p-8 flex flex-col items-center relative border-[12px] border-[#F2E6E4]">
-            {/* 背景紋理 */}
-            {/* <div className="absolute inset-0 opacity-[0.08] bg-[url('https://www.transparenttextures.com/patterns/handmade-paper.png')]"></div> */}
-
+          <div
+            ref={cardRef}
+            style={{
+              width: '375px',
+              height: '667px',
+              backgroundColor: '#FAF7F2',
+              padding: '32px',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              position: 'relative',
+              border: '12px solid #F2E6E4',
+              boxSizing: 'border-box'
+            }}
+          >
             {/* 裝飾框線 */}
-            <div className="absolute inset-4 border border-[#A8584C] opacity-20 rounded-[2rem]"></div>
-            <div className="absolute inset-5 border border-[#A8584C] opacity-10 rounded-[1.8rem]"></div>
+            <div style={{
+              position: 'absolute',
+              top: '16px',
+              left: '16px',
+              right: '16px',
+              bottom: '16px',
+              border: '1px solid #A8584C',
+              opacity: 0.2,
+              borderRadius: '2rem',
+              pointerEvents: 'none'
+            }}></div>
+            <div style={{
+              position: 'absolute',
+              top: '20px',
+              left: '20px',
+              right: '20px',
+              bottom: '20px',
+              border: '1px solid #A8584C',
+              opacity: 0.1,
+              borderRadius: '1.8rem',
+              pointerEvents: 'none'
+            }}></div>
 
             {/* 頂部：日期與標題 */}
-            <div className="w-full text-center space-y-4 pt-6 pb-4 z-10">
-              {/* 使用 indent (縮排) 來平衡 letter-spacing，比 padding 更準確 */}
-              <p className="text-sm font-bold tracking-[0.5em] text-[#A8584C] uppercase indent-[0.5em]">{dateStr}</p>
-              <h1 className="calligraphy-font text-4xl font-bold text-[#4E342E] tracking-widest indent-[0.1em]">功德圓滿</h1>
-              <div className="w-12 h-1 bg-[#A8584C] mx-auto opacity-30 rounded-full"></div>
+            <div style={{
+              width: '100%',
+              textAlign: 'center',
+              paddingTop: '16px'
+            }}>
+              <p style={{
+                fontSize: '14px',
+                fontWeight: 'bold',
+                letterSpacing: '0.5em',
+                color: '#A8584C',
+                textTransform: 'uppercase',
+                paddingLeft: '0.5em',
+                margin: '0 0 16px 0'
+              }}>{dateStr}</p>
+              <h1 style={{
+                fontSize: '2.5rem',
+                fontWeight: 'bold',
+                color: '#4E342E',
+                letterSpacing: '0.1em',
+                paddingLeft: '0.1em',
+                margin: '0 0 16px 0',
+                fontFamily: '"Kaiti", "STKaiti", "BiauKai", serif'
+              }}>功德圓滿</h1>
+              <div style={{
+                width: '48px',
+                height: '4px',
+                backgroundColor: '#A8584C',
+                margin: '0 auto',
+                opacity: 0.3,
+                borderRadius: '9999px'
+              }}></div>
             </div>
 
             {/* 中間：核心數據 */}
-            <div className="flex flex-col items-center w-full py-6 space-y-4 z-10">
-              <div className="serif-font text-2xl font-bold text-[#5D4037]">{currentChant}</div>
-              <div className="relative">
-                <div className="absolute -inset-6 bg-[#A8584C] opacity-5 blur-2xl rounded-full"></div>
-                <div className="text-7xl font-black text-[#A8584C] serif-font tracking-tighter">{todayCount.toLocaleString()}</div>
-              </div>
-              {/* 這裡使用 padding-left 來平衡，因為是帶邊框的區塊 */}
-              <div className="text-sm font-bold text-[#A8584C] tracking-[0.2em] border-t border-b border-[#A8584C]/20 py-1 px-6 pl-[calc(1.5rem+0.2em)]">遍數總結</div>
+            <div style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              width: '100%',
+              padding: '24px 0'
+            }}>
+              <div style={{
+                fontSize: '1.5rem',
+                fontWeight: 'bold',
+                color: '#5D4037',
+                marginBottom: '16px',
+                fontFamily: '"FangSong", "STFangsong", "SimSun", serif'
+              }}>{currentChant}</div>
+              <div style={{
+                fontSize: '4.5rem',
+                fontWeight: '900',
+                color: '#A8584C',
+                letterSpacing: '-0.05em',
+                lineHeight: '1',
+                marginBottom: '16px',
+                fontFamily: '"FangSong", "STFangsong", "SimSun", serif'
+              }}>{todayCount.toLocaleString()}</div>
+              <div style={{
+                fontSize: '14px',
+                fontWeight: 'bold',
+                color: '#A8584C',
+                letterSpacing: '0.2em',
+                borderTop: '1px solid rgba(168, 88, 76, 0.2)',
+                borderBottom: '1px solid rgba(168, 88, 76, 0.2)',
+                padding: '4px 24px',
+                paddingLeft: 'calc(24px + 0.2em)'
+              }}>遍數總結</div>
             </div>
 
             {/* 底部：迴向文 */}
-            <div className="w-full space-y-6 pt-4 pb-6 z-10">
-              <div className="serif-font text-center text-[#5D4037] text-base leading-loose italic opacity-90 px-4 whitespace-pre-wrap">
+            <div style={{
+              width: '100%',
+              textAlign: 'center',
+              paddingBottom: '16px'
+            }}>
+              <div style={{
+                fontSize: '16px',
+                color: '#5D4037',
+                lineHeight: '2',
+                fontStyle: 'italic',
+                opacity: 0.9,
+                padding: '0 16px',
+                whiteSpace: 'pre-wrap',
+                marginBottom: '24px',
+                fontFamily: '"FangSong", "STFangsong", "SimSun", serif'
+              }}>
                 {editableText}
               </div>
 
-              {/* Footer Logo Section - Using Table/Flex Hybrid for Maximum Stability */}
-              <div
-                className="w-full flex justify-center items-center pt-2"
-                style={{
-                  height: '60px', // Explicit height
-                  marginTop: '10px'
-                }}
-              >
+              {/* Footer Logo Section */}
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '12px'
+              }}>
+                {/* Logo Box */}
                 <div style={{
+                  width: '48px',
+                  height: '48px',
+                  border: '2px solid #A8584C',
+                  borderRadius: '8px',
                   display: 'flex',
+                  flexDirection: 'column',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  gap: '12px'
+                  opacity: 0.9
                 }}>
-                  {/* Logo Box */}
-                  <div style={{
-                    width: '48px',
-                    height: '48px',
-                    border: '2px solid #A8584C',
-                    borderRadius: '8px',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    opacity: 0.9,
-                    backgroundColor: 'transparent' // Ensure bg is transparent
-                  }}>
-                    <span style={{ fontSize: '10px', fontWeight: 'bold', color: '#A8584C', lineHeight: '1', display: 'block' }}>靜心</span>
-                    <span style={{ fontSize: '10px', fontWeight: 'bold', color: '#A8584C', lineHeight: '1', display: 'block' }}>念佛</span>
-                  </div>
+                  <span style={{ fontSize: '10px', fontWeight: 'bold', color: '#A8584C', lineHeight: '1' }}>靜心</span>
+                  <span style={{ fontSize: '10px', fontWeight: 'bold', color: '#A8584C', lineHeight: '1' }}>念佛</span>
+                </div>
 
-                  {/* Text Label */}
-                  <div style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'center',
-                    height: '48px', // Match Logo Height
-                    textAlign: 'left'
-                  }}>
-                    <p style={{
-                      fontSize: '10px',
-                      color: '#9CA3AF', // gray-400
-                      fontWeight: 'bold',
-                      letterSpacing: '0.1em',
-                      textTransform: 'uppercase',
-                      lineHeight: '1',
-                      margin: '0 0 4px 0', // Explicit margin
-                      paddingLeft: '2px' // indentation
-                    }}>APP</p>
-                    <p style={{
-                      fontSize: '12px',
-                      color: '#A8584C',
-                      fontWeight: 'bold',
-                      letterSpacing: '0.1em',
-                      lineHeight: '1',
-                      margin: '0',
-                      paddingLeft: '2px'
-                    }}>靜心念佛</p>
-                  </div>
+                {/* Text Label */}
+                <div style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'center',
+                  textAlign: 'left'
+                }}>
+                  <p style={{
+                    fontSize: '10px',
+                    color: '#9CA3AF',
+                    fontWeight: 'bold',
+                    letterSpacing: '0.1em',
+                    textTransform: 'uppercase',
+                    lineHeight: '1',
+                    margin: '0 0 4px 0'
+                  }}>APP</p>
+                  <p style={{
+                    fontSize: '12px',
+                    color: '#A8584C',
+                    fontWeight: 'bold',
+                    letterSpacing: '0.1em',
+                    lineHeight: '1',
+                    margin: '0'
+                  }}>靜心念佛</p>
                 </div>
               </div>
             </div>
