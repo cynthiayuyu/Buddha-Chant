@@ -19,7 +19,7 @@ import DedicationModal from './components/DedicationModal';
 import { ChantRecord, UserSettings, ItemGoal, Sutra } from './types';
 import { DEFAULT_CHANTS, DEFAULT_SUTRAS } from './constants';
 import { User } from 'firebase/auth';
-import { onAuthChange, signInAnonymouslyUser, saveToCloud, loadFromCloud } from './firebase';
+import { onAuthChange, signInAnonymouslyUser, saveToCloud, loadFromCloud, loadFromCloudByRecoveryCode } from './firebase';
 
 const App: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'counter' | 'history' | 'sutras' | 'stats' | 'settings'>('counter');
@@ -171,6 +171,33 @@ const App: React.FC = () => {
     }
   }, [firebaseUser]);
 
+  // 使用恢復碼從雲端恢復函數
+  const handleRestoreByRecoveryCode = useCallback(async (recoveryCode: string) => {
+    setIsSyncing(true);
+    setSyncError(null);
+
+    try {
+      const cloudData = await loadFromCloudByRecoveryCode(recoveryCode);
+      if (cloudData) {
+        setRecords(cloudData.records);
+        setSettings(prev => ({
+          ...prev,
+          ...cloudData.settings,
+          lastSyncTime: cloudData.lastUpdated?.toISOString() || prev.lastSyncTime
+        }));
+        return true;
+      } else {
+        setSyncError('找不到此恢復碼的備份資料');
+        return false;
+      }
+    } catch (error) {
+      setSyncError('恢復失敗，請檢查恢復碼是否正確');
+      return false;
+    } finally {
+      setIsSyncing(false);
+    }
+  }, []);
+
   // 自動備份（當資料變化時，且距離上次同步超過 5 分鐘）
   useEffect(() => {
     if (settings.cloudBackupEnabled && firebaseUser && !isSyncing) {
@@ -294,9 +321,11 @@ const App: React.FC = () => {
                 setSettings={setSettings}
                 onCloudBackup={handleCloudBackup}
                 onCloudRestore={handleCloudRestore}
+                onRestoreByRecoveryCode={handleRestoreByRecoveryCode}
                 isSyncing={isSyncing}
                 syncError={syncError}
                 isLoggedIn={!!firebaseUser}
+                userId={firebaseUser?.uid || null}
               />
             </motion.div>
           )}
