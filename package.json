@@ -9,13 +9,16 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "framer-motion": "^12.26.2",
-    "lucide-react": "^0.562.0",
-    "recharts": "^3.6.0",
-    "react-dom": "^19.2.3",
-    "react": "^19.2.3",
     "date-fns": "^4.1.0",
-    "html2canvas": "1.4.1"
+    "firebase": "^12.8.0",
+    "framer-motion": "^12.26.2",
+    "html2canvas": "1.4.1",
+    "lucide-react": "^0.562.0",
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3",
+    "recharts": "^3.6.0",
+    "vite-plugin-pwa": "^1.2.0",
+    "workbox-window": "^7.4.0"
   },
   "devDependencies": {
     "@types/node": "^22.14.0",

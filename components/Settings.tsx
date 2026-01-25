@@ -2,17 +2,33 @@
 import React, { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { UserSettings, FeedbackType, ItemGoal, CounterMode } from '../types';
-import { 
-  Music, Bell, MousePointer2, VolumeX, Vibrate, Target, BookText, Plus, Trash2, 
-  Settings as SettingsIcon, MousePointer, Keyboard, ChevronRight, ChevronDown 
+import {
+  Music, Bell, MousePointer2, VolumeX, Vibrate, Target, BookText, Plus, Trash2,
+  Settings as SettingsIcon, MousePointer, Keyboard, ChevronRight, ChevronDown,
+  Cloud, CloudUpload, CloudDownload, RefreshCw, AlertCircle, CheckCircle2
 } from 'lucide-react';
+import { format } from 'date-fns';
+import { zhTW } from 'date-fns/locale';
 
 interface Props {
   settings: UserSettings;
   setSettings: (updater: (prev: UserSettings) => UserSettings) => void;
+  onCloudBackup?: () => Promise<boolean>;
+  onCloudRestore?: () => Promise<boolean>;
+  isSyncing?: boolean;
+  syncError?: string | null;
+  isLoggedIn?: boolean;
 }
 
-const Settings: React.FC<Props> = ({ settings, setSettings }) => {
+const Settings: React.FC<Props> = ({
+  settings,
+  setSettings,
+  onCloudBackup,
+  onCloudRestore,
+  isSyncing = false,
+  syncError = null,
+  isLoggedIn = false
+}) => {
   const [newChant, setNewChant] = useState('');
   const [editingChantGoal, setEditingChantGoal] = useState<string | null>(null);
   const [confirmDelete, setConfirmDelete] = useState<string | null>(null);
@@ -165,9 +181,9 @@ const Settings: React.FC<Props> = ({ settings, setSettings }) => {
         </div>
         <div className="grid grid-cols-4 gap-3">
           {feedbacks.map((f) => (
-            <button 
-              key={f.type} 
-              onClick={() => updateSetting('feedback', f.type)} 
+            <button
+              key={f.type}
+              onClick={() => updateSetting('feedback', f.type)}
               className={`flex flex-col items-center gap-2 p-3 rounded-2xl border transition-all ${settings.feedback === f.type ? 'bg-[#F2E6E4]/50 border-[#A8584C] text-[#4E342E]' : 'bg-white border-gray-100 text-gray-400 hover:bg-gray-50'}`}
             >
               <f.icon size={20} />
@@ -180,13 +196,96 @@ const Settings: React.FC<Props> = ({ settings, setSettings }) => {
             <Vibrate size={18} className="text-[#A8584C]" />
             <span className="text-sm font-bold text-gray-500">觸覺震動回饋</span>
           </div>
-          <button 
+          <button
             onClick={() => updateSetting('vibrate', !settings.vibrate)}
             className={`w-12 h-6 rounded-full relative transition-colors ${settings.vibrate ? 'bg-[#A8584C]' : 'bg-gray-200'}`}
           >
             <motion.div animate={{ x: settings.vibrate ? 26 : 2 }} className="absolute top-1 w-4 h-4 bg-white rounded-full" />
           </button>
         </div>
+      </section>
+
+      {/* 雲端備份區塊 */}
+      <section className="bg-white/80 p-6 rounded-[2.5rem] shadow-sm border border-[#e7e5e4] space-y-5">
+        <div className="flex items-center gap-2">
+          <Cloud size={18} className="text-[#A8584C]" />
+          <h3 className="text-xs font-bold text-gray-400 uppercase tracking-widest">雲端備份</h3>
+        </div>
+
+        {/* 狀態顯示 */}
+        <div className="bg-[#FAF7F2] rounded-2xl p-4 border border-[#e7e5e4]">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              {isSyncing ? (
+                <RefreshCw size={16} className="text-[#A8584C] animate-spin" />
+              ) : settings.cloudBackupEnabled ? (
+                <CheckCircle2 size={16} className="text-green-500" />
+              ) : (
+                <Cloud size={16} className="text-gray-400" />
+              )}
+              <span className="text-sm font-medium text-gray-600">
+                {isSyncing ? '同步中...' : settings.cloudBackupEnabled ? '已啟用雲端備份' : '未啟用雲端備份'}
+              </span>
+            </div>
+          </div>
+          {settings.lastSyncTime && (
+            <p className="text-xs text-gray-400 mt-2">
+              上次同步：{format(new Date(settings.lastSyncTime), 'MM/dd HH:mm', { locale: zhTW })}
+            </p>
+          )}
+          {syncError && (
+            <div className="flex items-center gap-2 mt-2 text-red-500">
+              <AlertCircle size={14} />
+              <span className="text-xs">{syncError}</span>
+            </div>
+          )}
+        </div>
+
+        {/* 備份與恢復按鈕 */}
+        <div className="grid grid-cols-2 gap-3">
+          <button
+            onClick={onCloudBackup}
+            disabled={isSyncing}
+            className={`flex flex-col items-center gap-2 p-4 rounded-2xl border transition-all ${
+              isSyncing
+                ? 'bg-gray-100 border-gray-200 text-gray-400 cursor-not-allowed'
+                : 'bg-[#F2E6E4]/50 border-[#A8584C]/30 text-[#4E342E] hover:bg-[#F2E6E4] active:scale-95'
+            }`}
+          >
+            <CloudUpload size={24} />
+            <span className="text-xs font-bold">備份到雲端</span>
+          </button>
+          <button
+            onClick={onCloudRestore}
+            disabled={isSyncing}
+            className={`flex flex-col items-center gap-2 p-4 rounded-2xl border transition-all ${
+              isSyncing
+                ? 'bg-gray-100 border-gray-200 text-gray-400 cursor-not-allowed'
+                : 'bg-white border-gray-200 text-gray-600 hover:bg-gray-50 active:scale-95'
+            }`}
+          >
+            <CloudDownload size={24} />
+            <span className="text-xs font-bold">從雲端恢復</span>
+          </button>
+        </div>
+
+        {/* 自動備份開關 */}
+        <div className="flex items-center justify-between pt-4 border-t border-[#e7e5e4]">
+          <div className="flex flex-col">
+            <span className="text-sm font-bold text-gray-500">自動雲端備份</span>
+            <span className="text-xs text-gray-400">資料變更時自動同步</span>
+          </div>
+          <button
+            onClick={() => updateSetting('cloudBackupEnabled', !settings.cloudBackupEnabled)}
+            className={`w-12 h-6 rounded-full relative transition-colors ${settings.cloudBackupEnabled ? 'bg-[#A8584C]' : 'bg-gray-200'}`}
+          >
+            <motion.div animate={{ x: settings.cloudBackupEnabled ? 26 : 2 }} className="absolute top-1 w-4 h-4 bg-white rounded-full" />
+          </button>
+        </div>
+
+        <p className="text-xs text-gray-400 text-center">
+          資料將以匿名方式儲存於 Firebase 雲端
+        </p>
       </section>
     </div>
   );

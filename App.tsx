@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Flower2,
@@ -18,6 +18,8 @@ import Sutras from './components/Sutras';
 import DedicationModal from './components/DedicationModal';
 import { ChantRecord, UserSettings, ItemGoal, Sutra } from './types';
 import { DEFAULT_CHANTS, DEFAULT_SUTRAS } from './constants';
+import { User } from 'firebase/auth';
+import { onAuthChange, signInAnonymouslyUser, saveToCloud, loadFromCloud } from './firebase';
 
 const App: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'counter' | 'history' | 'sutras' | 'stats' | 'settings'>('counter');
@@ -72,6 +74,112 @@ const App: React.FC = () => {
 
   const [currentChant, setCurrentChant] = useState(DEFAULT_CHANTS[0]);
   const [showDedication, setShowDedication] = useState(false);
+
+  // Firebase 認證狀態
+  const [firebaseUser, setFirebaseUser] = useState<User | null>(null);
+  const [isSyncing, setIsSyncing] = useState(false);
+  const [syncError, setSyncError] = useState<string | null>(null);
+  const lastSyncRef = useRef<number>(0);
+
+  // 監聽 Firebase 認證狀態
+  useEffect(() => {
+    const unsubscribe = onAuthChange((user) => {
+      setFirebaseUser(user);
+    });
+    return () => unsubscribe();
+  }, []);
+
+  // 雲端備份函數
+  const handleCloudBackup = useCallback(async () => {
+    if (!firebaseUser) {
+      // 自動匿名登入
+      const user = await signInAnonymouslyUser();
+      if (!user) {
+        setSyncError('無法連接雲端服務');
+        return false;
+      }
+      setFirebaseUser(user);
+    }
+
+    const userId = firebaseUser?.uid;
+    if (!userId) {
+      setSyncError('請先登入');
+      return false;
+    }
+
+    setIsSyncing(true);
+    setSyncError(null);
+
+    try {
+      const success = await saveToCloud(userId, records, settings);
+      if (success) {
+        const now = new Date().toISOString();
+        setSettings(prev => ({ ...prev, lastSyncTime: now, cloudBackupEnabled: true }));
+        lastSyncRef.current = Date.now();
+        return true;
+      } else {
+        setSyncError('備份失敗，請稍後再試');
+        return false;
+      }
+    } catch (error) {
+      setSyncError('備份失敗，請檢查網路連線');
+      return false;
+    } finally {
+      setIsSyncing(false);
+    }
+  }, [firebaseUser, records, settings]);
+
+  // 從雲端恢復函數
+  const handleCloudRestore = useCallback(async () => {
+    if (!firebaseUser) {
+      const user = await signInAnonymouslyUser();
+      if (!user) {
+        setSyncError('無法連接雲端服務');
+        return false;
+      }
+      setFirebaseUser(user);
+    }
+
+    const userId = firebaseUser?.uid;
+    if (!userId) {
+      setSyncError('請先登入');
+      return false;
+    }
+
+    setIsSyncing(true);
+    setSyncError(null);
+
+    try {
+      const cloudData = await loadFromCloud(userId);
+      if (cloudData) {
+        setRecords(cloudData.records);
+        setSettings(prev => ({
+          ...prev,
+          ...cloudData.settings,
+          lastSyncTime: cloudData.lastUpdated?.toISOString() || prev.lastSyncTime
+        }));
+        return true;
+      } else {
+        setSyncError('雲端沒有備份資料');
+        return false;
+      }
+    } catch (error) {
+      setSyncError('恢復失敗，請檢查網路連線');
+      return false;
+    } finally {
+      setIsSyncing(false);
+    }
+  }, [firebaseUser]);
+
+  // 自動備份（當資料變化時，且距離上次同步超過 5 分鐘）
+  useEffect(() => {
+    if (settings.cloudBackupEnabled && firebaseUser && !isSyncing) {
+      const timeSinceLastSync = Date.now() - lastSyncRef.current;
+      if (timeSinceLastSync > 5 * 60 * 1000) { // 5 分鐘
+        handleCloudBackup();
+      }
+    }
+  }, [records, settings.cloudBackupEnabled, firebaseUser, isSyncing]);
 
   // 恢復注音排序邏輯
   const sortedChants = useMemo(() => {
@@ -181,7 +289,15 @@ const App: React.FC = () => {
           )}
           {activeTab === 'settings' && (
             <motion.div key="settings" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="h-full">
-              <Settings settings={settings} setSettings={setSettings} />
+              <Settings
+                settings={settings}
+                setSettings={setSettings}
+                onCloudBackup={handleCloudBackup}
+                onCloudRestore={handleCloudRestore}
+                isSyncing={isSyncing}
+                syncError={syncError}
+                isLoggedIn={!!firebaseUser}
+              />
             </motion.div>
           )}
         </AnimatePresence>
