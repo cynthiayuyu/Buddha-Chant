@@ -165,7 +165,7 @@ const DedicationModal: React.FC<Props> = ({ onClose, todayCount, currentChant, c
         {/* --- 隱藏的截圖區域 (Off-screen rendering) --- */}
         {/* 改為使用 absolute 和負座標隱藏，比 opacity:0 更穩定，確保 html2canvas 能抓取 */}
         <div className="absolute top-0 left-[-9999px] pointer-events-none">
-          <div ref={cardRef} className="w-[375px] min-h-[667px] bg-[#FAF7F2] p-8 flex flex-col items-center justify-between relative border-[12px] border-[#F2E6E4]">
+          <div ref={cardRef} className="w-[375px] bg-[#FAF7F2] p-8 flex flex-col items-center relative border-[12px] border-[#F2E6E4]">
             {/* 背景紋理 */}
             {/* <div className="absolute inset-0 opacity-[0.08] bg-[url('https://www.transparenttextures.com/patterns/handmade-paper.png')]"></div> */}
 
@@ -174,7 +174,7 @@ const DedicationModal: React.FC<Props> = ({ onClose, todayCount, currentChant, c
             <div className="absolute inset-5 border border-[#A8584C] opacity-10 rounded-[1.8rem]"></div>
 
             {/* 頂部：日期與標題 */}
-            <div className="w-full text-center space-y-4 pt-8 z-10">
+            <div className="w-full text-center space-y-4 pt-6 pb-4 z-10">
               {/* 使用 indent (縮排) 來平衡 letter-spacing，比 padding 更準確 */}
               <p className="text-sm font-bold tracking-[0.5em] text-[#A8584C] uppercase indent-[0.5em]">{dateStr}</p>
               <h1 className="calligraphy-font text-4xl font-bold text-[#4E342E] tracking-widest indent-[0.1em]">功德圓滿</h1>
@@ -182,7 +182,7 @@ const DedicationModal: React.FC<Props> = ({ onClose, todayCount, currentChant, c
             </div>
 
             {/* 中間：核心數據 */}
-            <div className="flex-1 flex flex-col items-center justify-center w-full py-8 space-y-6 z-10">
+            <div className="flex flex-col items-center w-full py-6 space-y-4 z-10">
               <div className="serif-font text-2xl font-bold text-[#5D4037]">{currentChant}</div>
               <div className="relative">
                 <div className="absolute -inset-6 bg-[#A8584C] opacity-5 blur-2xl rounded-full"></div>
@@ -193,7 +193,7 @@ const DedicationModal: React.FC<Props> = ({ onClose, todayCount, currentChant, c
             </div>
 
             {/* 底部：迴向文 */}
-            <div className="w-full space-y-8 pb-8 z-10">
+            <div className="w-full space-y-6 pt-4 pb-6 z-10">
               <div className="serif-font text-center text-[#5D4037] text-base leading-loose italic opacity-90 px-4 whitespace-pre-wrap">
                 {editableText}
               </div>

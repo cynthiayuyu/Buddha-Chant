@@ -103,3 +103,30 @@ export const getLastSyncTime = async (userId: string): Promise<Date | null> => {
     return null;
   }
 };
+
+// Load data from cloud using recovery code (any user ID)
+export const loadFromCloudByRecoveryCode = async (
+  recoveryCode: string
+): Promise<{ records: ChantRecord[]; settings: UserSettings; lastUpdated: Date | null } | null> => {
+  try {
+    // 清理恢復碼（移除空格等）
+    const cleanCode = recoveryCode.trim();
+    if (!cleanCode) return null;
+
+    const userDocRef = doc(db, 'users', cleanCode);
+    const docSnap = await getDoc(userDocRef);
+
+    if (docSnap.exists()) {
+      const data = docSnap.data() as CloudBackupData;
+      return {
+        records: data.records || [],
+        settings: data.settings,
+        lastUpdated: data.lastUpdated ? (data.lastUpdated as any).toDate() : null
+      };
+    }
+    return null;
+  } catch (error) {
+    console.error('Load from cloud by recovery code failed:', error);
+    return null;
+  }
+};

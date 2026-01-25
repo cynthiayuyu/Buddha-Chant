@@ -5,7 +5,8 @@ import { UserSettings, FeedbackType, ItemGoal, CounterMode } from '../types';
 import {
   Music, Bell, MousePointer2, VolumeX, Vibrate, Target, BookText, Plus, Trash2,
   Settings as SettingsIcon, MousePointer, Keyboard, ChevronRight, ChevronDown,
-  Cloud, CloudUpload, CloudDownload, RefreshCw, AlertCircle, CheckCircle2
+  Cloud, CloudUpload, CloudDownload, RefreshCw, AlertCircle, CheckCircle2,
+  Copy, Check, Key
 } from 'lucide-react';
 import { format } from 'date-fns';
 import { zhTW } from 'date-fns/locale';
@@ -15,9 +16,11 @@ interface Props {
   setSettings: (updater: (prev: UserSettings) => UserSettings) => void;
   onCloudBackup?: () => Promise<boolean>;
   onCloudRestore?: () => Promise<boolean>;
+  onRestoreByRecoveryCode?: (code: string) => Promise<boolean>;
   isSyncing?: boolean;
   syncError?: string | null;
   isLoggedIn?: boolean;
+  userId?: string | null;
 }
 
 const Settings: React.FC<Props> = ({
@@ -25,13 +28,18 @@ const Settings: React.FC<Props> = ({
   setSettings,
   onCloudBackup,
   onCloudRestore,
+  onRestoreByRecoveryCode,
   isSyncing = false,
   syncError = null,
-  isLoggedIn = false
+  isLoggedIn = false,
+  userId = null
 }) => {
   const [newChant, setNewChant] = useState('');
   const [editingChantGoal, setEditingChantGoal] = useState<string | null>(null);
   const [confirmDelete, setConfirmDelete] = useState<string | null>(null);
+  const [showRecoveryInput, setShowRecoveryInput] = useState(false);
+  const [recoveryCode, setRecoveryCode] = useState('');
+  const [copiedUserId, setCopiedUserId] = useState(false);
 
   // 恢復：使用注音排序
   const sortedAvailableChants = useMemo(() => {
@@ -241,6 +249,34 @@ const Settings: React.FC<Props> = ({
           )}
         </div>
 
+        {/* 恢復碼顯示 */}
+        {userId && (
+          <div className="bg-[#F2E6E4]/30 rounded-2xl p-4 border border-[#A8584C]/10">
+            <div className="flex items-center gap-2 mb-2">
+              <Key size={14} className="text-[#A8584C]" />
+              <span className="text-xs font-bold text-gray-500">您的恢復碼（請妥善保存）</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <code className="flex-1 bg-white px-3 py-2 rounded-lg text-xs font-mono text-[#4E342E] border border-[#e7e5e4] overflow-x-auto">
+                {userId}
+              </code>
+              <button
+                onClick={() => {
+                  navigator.clipboard.writeText(userId);
+                  setCopiedUserId(true);
+                  setTimeout(() => setCopiedUserId(false), 2000);
+                }}
+                className="p-2 rounded-lg bg-white border border-[#e7e5e4] text-gray-500 hover:text-[#A8584C] active:scale-95 transition-all"
+              >
+                {copiedUserId ? <Check size={16} className="text-green-500" /> : <Copy size={16} />}
+              </button>
+            </div>
+            <p className="text-[10px] text-gray-400 mt-2">
+              換設備時可用此碼恢復資料
+            </p>
+          </div>
+        )}
+
         {/* 備份與恢復按鈕 */}
         <div className="grid grid-cols-2 gap-3">
           <button
@@ -267,6 +303,62 @@ const Settings: React.FC<Props> = ({
             <CloudDownload size={24} />
             <span className="text-xs font-bold">從雲端恢復</span>
           </button>
+        </div>
+
+        {/* 使用恢復碼恢復 */}
+        <div className="pt-4 border-t border-[#e7e5e4]">
+          {!showRecoveryInput ? (
+            <button
+              onClick={() => setShowRecoveryInput(true)}
+              className="w-full text-center text-xs text-[#A8584C] font-medium hover:underline"
+            >
+              使用恢復碼恢復資料
+            </button>
+          ) : (
+            <div className="space-y-3">
+              <div className="flex items-center gap-2">
+                <Key size={14} className="text-gray-400" />
+                <span className="text-xs font-bold text-gray-500">輸入恢復碼</span>
+              </div>
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  value={recoveryCode}
+                  onChange={(e) => setRecoveryCode(e.target.value)}
+                  placeholder="貼上恢復碼..."
+                  className="flex-1 px-3 py-2 bg-[#FAF7F2] border border-[#e7e5e4] rounded-xl text-sm outline-none focus:border-[#A8584C] font-mono"
+                />
+                <button
+                  onClick={async () => {
+                    if (recoveryCode.trim() && onRestoreByRecoveryCode) {
+                      const success = await onRestoreByRecoveryCode(recoveryCode.trim());
+                      if (success) {
+                        setShowRecoveryInput(false);
+                        setRecoveryCode('');
+                      }
+                    }
+                  }}
+                  disabled={isSyncing || !recoveryCode.trim()}
+                  className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${
+                    isSyncing || !recoveryCode.trim()
+                      ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                      : 'bg-[#A8584C] text-white hover:bg-[#8D4439] active:scale-95'
+                  }`}
+                >
+                  恢復
+                </button>
+              </div>
+              <button
+                onClick={() => {
+                  setShowRecoveryInput(false);
+                  setRecoveryCode('');
+                }}
+                className="w-full text-center text-xs text-gray-400 hover:text-gray-600"
+              >
+                取消
+              </button>
+            </div>
+          )}
         </div>
 
         {/* 自動備份開關 */}
