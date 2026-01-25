@@ -172,12 +172,10 @@ const DedicationModal: React.FC<Props> = ({ onClose, todayCount, currentChant, c
               height: '667px',
               backgroundColor: '#FAF7F2',
               padding: '24px',
-              paddingTop: '40px',
-              paddingBottom: '32px',
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
-              justifyContent: 'flex-start',
+              justifyContent: 'center',
               position: 'relative',
               border: '12px solid #F2E6E4',
               boxSizing: 'border-box'
@@ -211,7 +209,7 @@ const DedicationModal: React.FC<Props> = ({ onClose, todayCount, currentChant, c
             <div style={{
               width: '100%',
               textAlign: 'center',
-              marginBottom: '24px'
+              marginBottom: '20px'
             }}>
               <p style={{
                 fontSize: '14px',
@@ -280,8 +278,7 @@ const DedicationModal: React.FC<Props> = ({ onClose, todayCount, currentChant, c
             {/* 底部：迴向文 */}
             <div style={{
               width: '100%',
-              textAlign: 'center',
-              marginTop: 'auto'
+              textAlign: 'center'
             }}>
               <div style={{
                 fontSize: '16px',
