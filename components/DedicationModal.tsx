@@ -205,13 +205,21 @@ const DedicationModal: React.FC<Props> = ({ onClose, todayCount, currentChant, c
               pointerEvents: 'none'
             }}></div>
 
-            {/* 頂部：日期與標題 */}
+            {/* 內容容器 - 用負 margin 往上調整 */}
             <div style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
               width: '100%',
-              textAlign: 'center',
-              marginBottom: '20px'
+              marginTop: '-30px'
             }}>
-              <p style={{
+              {/* 頂部：日期與標題 */}
+              <div style={{
+                width: '100%',
+                textAlign: 'center',
+                marginBottom: '20px'
+              }}>
+                <p style={{
                 fontSize: '14px',
                 fontWeight: 'bold',
                 letterSpacing: '0.5em',
@@ -343,6 +351,8 @@ const DedicationModal: React.FC<Props> = ({ onClose, todayCount, currentChant, c
                   }}>靜心念佛</p>
                 </div>
               </div>
+            </div>
+            {/* 關閉內容容器 */}
             </div>
           </div>
         </div>
