@@ -171,7 +171,9 @@ const DedicationModal: React.FC<Props> = ({ onClose, todayCount, currentChant, c
               width: '375px',
               height: '667px',
               backgroundColor: '#FAF7F2',
-              padding: '24px',
+              padding: '28px',
+              paddingTop: '28px',
+              paddingBottom: '28px',
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
@@ -181,7 +183,7 @@ const DedicationModal: React.FC<Props> = ({ onClose, todayCount, currentChant, c
               boxSizing: 'border-box'
             }}
           >
-            {/* 裝飾框線 */}
+            {/* 裝飾框線 - 和 padding 對齊 */}
             <div style={{
               position: 'absolute',
               top: '16px',
@@ -205,19 +207,18 @@ const DedicationModal: React.FC<Props> = ({ onClose, todayCount, currentChant, c
               pointerEvents: 'none'
             }}></div>
 
-            {/* 內容容器 - 用負 margin 往上調整 */}
+            {/* 內容容器 */}
             <div style={{
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
-              width: '100%',
-              marginTop: '-30px'
+              width: '100%'
             }}>
               {/* 頂部：日期與標題 */}
               <div style={{
                 width: '100%',
                 textAlign: 'center',
-                marginBottom: '20px'
+                marginBottom: '16px'
               }}>
                 <p style={{
                 fontSize: '14px',
@@ -253,7 +254,7 @@ const DedicationModal: React.FC<Props> = ({ onClose, todayCount, currentChant, c
               flexDirection: 'column',
               alignItems: 'center',
               width: '100%',
-              marginBottom: '20px'
+              marginBottom: '16px'
             }}>
               <div style={{
                 fontSize: '1.5rem',
